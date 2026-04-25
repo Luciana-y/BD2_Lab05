@@ -20,7 +20,7 @@ def export_to_heap(csv_path: str, heap_path: str, record_format: str, page_size:
     with open(csv_path, 'r') as csv_file, open(heap_path, 'wb') as heap_file:
         reader = csv.reader(csv_file)
 
-        next(reader)  # 🔥 saltar header
+        next(reader)  #saltar header
 
         page_records = []
 
