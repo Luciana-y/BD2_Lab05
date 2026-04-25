@@ -20,7 +20,7 @@ def export_to_heap(csv_path: str, heap_path: str, record_format: str, page_size:
     with open(csv_path, 'r') as csv_file, open(heap_path, 'wb') as heap_file:
         reader = csv.reader(csv_file)
 
-        next(reader)  # 🔥 saltar header
+        next(reader)  #ssaltar header
 
         page_records = []
 
@@ -109,7 +109,7 @@ page_size: int):
 # Retorna el número total de páginas del heap file.
 def count_pages(heap_path: str, page_size: int) -> int:
     sieze = os.path.getsize(heap_path)
-    return (sieze + page_size - 1)
+    return (sieze + page_size - 1) // page_size
 
 def main():
     csv_path = "c:/Users/Familia/Downloads/employee.csv"
