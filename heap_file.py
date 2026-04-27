@@ -7,7 +7,7 @@ def fix_str(s, size):
     return s.encode('utf-8')[:size].ljust(size, b'\x00')
 
 
-# Exporta un CSV a un heap file binario paginado.
+#exporta un CSV a un heap file binario paginado.
 def export_to_heap(csv_path: str, heap_path: str, record_format: str, page_size: int):
     record_size = struct.calcsize(record_format)
     header_size = 4
@@ -18,7 +18,7 @@ def export_to_heap(csv_path: str, heap_path: str, record_format: str, page_size:
     print("records_per_page:", records_per_page)
 
     with open(csv_path, 'r') as csv_file, open(heap_path, 'wb') as heap_file:
-        reader = csv.reader(csv_file)
+        reader = csv.reader(csv_file,delimiter=';')
 
         next(reader)  #saltar header
 
@@ -26,12 +26,14 @@ def export_to_heap(csv_path: str, heap_path: str, record_format: str, page_size:
 
         for row in reader:
             record = (
-                int(row[0]),
-                fix_str(row[1], 10),
-                fix_str(row[2], 14),
-                fix_str(row[3], 16),
-                row[4].encode('utf-8'),
-                fix_str(row[5], 10)
+                int(row[0]),          # q
+                fix_str(row[1], 20),  # 20s
+                fix_str(row[2], 5),   # 5s
+                fix_str(row[3], 15),  # 15s
+                fix_str(row[4], 15),  # 15s
+                fix_str(row[5], 15),  # 15s
+                fix_str(row[6], 15),  # 15s
+                fix_str(row[7], 15)   # 15s
             )
 
             page_records.append(record)
@@ -109,15 +111,24 @@ page_size: int):
 # Retorna el número total de páginas del heap file.
 def count_pages(heap_path: str, page_size: int) -> int:
     sieze = os.path.getsize(heap_path)
-    return (sieze + page_size - 1)
+    return (sieze + page_size - 1) // page_size
 
 def main():
-    csv_path = "c:/Users/Familia/Downloads/employee.csv"
-    heap_path = "c:/Users/Familia/Downloads/heap.bin"
+    csv_path = "data/employee.csv"
+    heap_path = "data/employee.bin"
 
-    record_format = "q10s14s16sc10s"
+    #q: ID (8 bytes)
+    #20s: Name
+    #5s: Age
+    #15s: Country
+    #15s: Department
+    #15s: Role
+    #15s: Salary
+    #15s: HireDate
     
-    page_size = 256  # byte
+    record_format = "q20s5s15s15s15s15s15s"
+    
+    page_size = 4096  # byte
 
     print("Exportando CSV a Heap File...")
     export_to_heap(csv_path, heap_path, record_format, page_size)
@@ -133,12 +144,12 @@ def main():
         records = read_page(heap_path, page_id, page_size, record_format)
 
         for rec in records:
-            # rec[1] es bytes → convertir a string
             id_val = rec[0]
             name_val = rec[1].decode('utf-8').strip('\x00')
+            dept_val = rec[4].decode('utf-8').strip('\x00')
+            hire_date = rec[7].decode('utf-8').strip('\x00')
 
-            print(f"id: {id_val}, name: {name_val}")
-
+            print(f"id: {id_val}, name: {name_val}, dept: {dept_val}, hired: {hire_date}")
         print()
 
 if __name__ == "__main__":
