@@ -7,7 +7,7 @@ def fix_str(s, size):
     return s.encode('utf-8')[:size].ljust(size, b'\x00')
 
 
-# Exporta un CSV a un heap file binario paginado.
+#exporta un CSV a un heap file binario paginado.
 def export_to_heap(csv_path: str, heap_path: str, record_format: str, page_size: int):
     record_size = struct.calcsize(record_format)
     header_size = 4
@@ -117,14 +117,14 @@ def main():
     csv_path = "data/employee.csv"
     heap_path = "data/employee.bin"
 
-    # q: ID (8 bytes)
-    # 20s: Name
-    # 5s: Age
-    # 15s: Country
-    # 15s: Department
-    # 15s: Role
-    # 15s: Salary
-    # 15s: HireDate
+    #q: ID (8 bytes)
+    #20s: Name
+    #5s: Age
+    #15s: Country
+    #15s: Department
+    #15s: Role
+    #15s: Salary
+    #15s: HireDate
     
     record_format = "q20s5s15s15s15s15s15s"
     

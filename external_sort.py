@@ -138,6 +138,7 @@ def multiway_merge(run_paths: list[str], output_path: str, page_size: int, buffe
 
 
 
+
 def external_sort(heap_path: str, output_path: str, page_size: int, buffer_size: int, sort_key_idx: int, record_format: str) -> dict:
     start_total = time.time()
     
